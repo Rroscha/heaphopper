@@ -22,6 +22,7 @@ def run_zoo_gen(config):
     ret = gen_zoo(config)
     sys.exit(ret)
 
+
 def run_poc_gen(config, binary, result, desc, source):
     gen_pocs(config, binary, result, desc, source)
     sys.exit(0)
@@ -50,7 +51,7 @@ if __name__ == '__main__':
             parser.error('trace requires --config and --binary')
         run_tracer(args.config, args.binary)
     elif args.action == 'gen':
-        if args.config is None :
+        if args.config is None:
             parser.error('gen requires --config')
         run_zoo_gen(args.config)
     elif args.action == 'poc':
