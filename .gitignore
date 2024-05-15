@@ -5,3 +5,5 @@ heaphopper/analysis/identify_bins/identify
 \.idea/
 
 heaphopper\.egg-info/
+
+.vscode
