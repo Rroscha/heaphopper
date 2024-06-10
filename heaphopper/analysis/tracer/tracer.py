@@ -435,6 +435,7 @@ def trace(config_name, binary_name):
     libc = proj.loader.shared_objects[libc_name]
 
     # Get allocator
+    # TODO
     allocator = proj.loader.shared_objects[allocator_name]
 
     # Create state and enable reverse memory map
@@ -466,8 +467,9 @@ def trace(config_name, binary_name):
 
 
     state = proj.factory.entry_state(add_options=added_options, remove_options=removed_options)
+    # TODO
     # heap = SimHeapBrk(heap_base=heap_base, heap_size=heap_size)
-    #state.register_plugin('heap', heap)
+    # state.register_plugin('heap', heap)
     state.register_plugin('heaphopper', HeapConditionTracker(config=config,
                                                        wtarget=(write_target_var.rebased_addr,
                                                                 write_target_var.size),

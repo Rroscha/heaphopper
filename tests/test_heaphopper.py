@@ -204,10 +204,11 @@ def verify_arbitrary_write(output):
 
 class TestHeapHopper(unittest.TestCase):
     def setUp(self):
-        output = check_output(["make", "-C", BASE_DIR, "clean"])
-        logger.debug(output)
-        output = check_output(["make", "-C", BASE_DIR])
-        logger.debug(output)
+        # output = check_output(["make", "-C", BASE_DIR, "clean"])
+        # logger.debug(output)
+        # output = check_output(["make", "-C", BASE_DIR])
+        # logger.debug(output)
+        pass
 
     def do_test(self, name, type_, poc_star=False):
         bin_name = name + ".bin"
@@ -222,7 +223,7 @@ class TestHeapHopper(unittest.TestCase):
         )
         config_path = os.path.join(location, "analysis.yaml")
         bin_path = os.path.join(location, bin_name)
-
+        
         check_single(result_path, bin_path, config_path)
 
         created_poc = create_poc_single(

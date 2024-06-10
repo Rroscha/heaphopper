@@ -334,6 +334,7 @@ def check_write(state):
         state.heaphopper.stack_trace = get_libc_stack_trace(state)
 
 def check_sym_data(state):
+    # Fake Free
     # Check if we overwrite a sym_data structure passed to free
     addr = state.inspect.mem_write_address
     free_addr = state.heaphopper.curr_freed_chunk
