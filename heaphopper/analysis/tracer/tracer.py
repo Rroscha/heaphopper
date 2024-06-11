@@ -15,7 +15,6 @@ import sys
 from elftools.elf.elffile import ELFFile
 
 from angr.state_plugins import Flags, SimFile
-from angr import SimHeapBrk
 from ..heap_condition_tracker import HeapConditionTracker, MallocInspect, FreeInspect
 from ..mem_limiter import MemLimiter
 from ..vuln_checker import VulnChecker
@@ -308,7 +307,6 @@ def setup_state(state, proj, config):
     header_size = state.solver.BVV(value=config['header_size'], size=8 * 8)
     state.memory.store(var_dict['header_size_addr'], header_size, 8, endness='Iend_LE')
 
-
     # Set malloc sizes
     malloc_size_var = proj.loader.main_object.get_symbol('malloc_sizes')
     var_dict['malloc_size_addrs'] = [malloc_size_var.rebased_addr + i for i in range(0, malloc_size_var.size, 8)]
@@ -425,8 +423,8 @@ def trace(config_name, binary_name):
 
     # Create project and disable sim_procedures for the libc
     proj = angr.Project(binary_name, exclude_sim_procedures_func=use_sim_procedure,
-                        load_options={'ld_path':[os.path.dirname(allocator_path), os.path.dirname(libc_path)],
-                                              'auto_load_libs':True})
+                        load_options={'ld_path': [os.path.dirname(allocator_path), os.path.dirname(libc_path)],
+                                      'auto_load_libs': True})
 
     # Find write_target
     write_target_var = proj.loader.main_object.get_symbol('write_target')
@@ -463,22 +461,22 @@ def trace(config_name, binary_name):
     bss = proj.loader.main_object.sections_map['.bss']
     heap_base = ((bss.vaddr + bss.memsize) & ~0xfff) + 0x1000
     heap_size = 64 * 4096
-    new_brk = claripy.BVV(heap_base + heap_size, proj.arch.bits)
+    # new_brk = claripy.BVV(heap_base + heap_size, proj.arch.bits)
 
-
+    # Initial state
     state = proj.factory.entry_state(add_options=added_options, remove_options=removed_options)
     # TODO
     # heap = SimHeapBrk(heap_base=heap_base, heap_size=heap_size)
     # state.register_plugin('heap', heap)
     state.register_plugin('heaphopper', HeapConditionTracker(config=config,
-                                                       wtarget=(write_target_var.rebased_addr,
-                                                                write_target_var.size),
-                                                       libc=libc, allocator=allocator))
+                                                             wtarget=(write_target_var.rebased_addr,
+                                                                      write_target_var.size),
+                                                             libc=libc, allocator=allocator))
 
     # state.posix.set_brk(new_brk) # now handled in the heap plugin
     state.posix.brk = heap_base + heap_size
     state.heap.heap_base = heap_base
-    state.heap.mmap_base = heap_base + 2*heap_size
+    state.heap.mmap_base = heap_base + 2 * heap_size
     state.heaphopper.set_level(config['log_level'])
 
     if config['fix_loader_problem']:
@@ -492,14 +490,12 @@ def trace(config_name, binary_name):
     state.memory.read_strategies = [
         angr.concretization_strategies.SimConcretizationStrategySolutions(16),
         angr.concretization_strategies.SimConcretizationStrategyControlledData(4096,
-                                                                                                             var_dict[
-                                                                                                                 'global_vars']),
+                                                                               var_dict['global_vars']),
         angr.concretization_strategies.SimConcretizationStrategyEval(4096)]
     state.memory.write_strategies = [
         angr.concretization_strategies.SimConcretizationStrategySolutions(16),
         angr.concretization_strategies.SimConcretizationStrategyControlledData(4096,
-                                                                                                             var_dict[
-                                                                                                                 'global_vars']),
+                                                                               var_dict['global_vars']),
         angr.concretization_strategies.SimConcretizationStrategyEval(4096)]
 
     # Hook malloc and free
@@ -515,7 +511,7 @@ def trace(config_name, binary_name):
     found_paths = []
 
     # Configure simgr
-    #sm = proj.factory.simgr(thing=state, immutable=False)
+    # sm = proj.factory.simgr(thing=state, immutable=False)
     sm = proj.factory.simgr(thing=state)
 
     sm.use_technique(VulnChecker(config['mem_corruption_fd'], config['input_pre_constraint'], config['input_values'],
@@ -559,8 +555,8 @@ def trace(config_name, binary_name):
     real_fd = state.posix.open(path, flags=Flags.O_RDONLY, preferred_fd=mem_corr_fd)
     if mem_corr_fd != real_fd:
         raise Exception("Overflow fd already exists.")
-    #state.posix.fd[mem_corr_fd] = f
-    #state.posix.fs[name] = f
+    # state.posix.fd[mem_corr_fd] = f
+    # state.posix.fs[name] = f
 
     # constrain input
     if config['input_pre_constraint']:
@@ -754,7 +750,7 @@ def store_results(num_results, bin_file, states, var_dict, fd):
         result['overflow_sizes'] = []
         result['write_targets'] = []
         result['mem2chunk_offset'] = state.solver.eval(state.memory.load(var_dict['mem2chunk_addr'], 8,
-                                                                                   endness='Iend_LE'))
+                                                                         endness='Iend_LE'))
         result['stack_trace'] = state.heaphopper.stack_trace
         result['last_line'] = state.heaphopper.last_line
         result['heap_base'] = state.heap.heap_base
