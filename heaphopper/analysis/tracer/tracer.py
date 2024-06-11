@@ -595,7 +595,6 @@ def trace(config_name, binary_name):
 
         if heardEnter():
             debug = True
-
     sm.move(from_stash='found', to_stash='vuln', filter_func=lambda p: p.heaphopper.vulnerable)
     found_paths.extend(sm.vuln)
 
