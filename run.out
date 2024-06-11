@@ -1,0 +1,45 @@
+Running test: how2heap_fastbin_dup
+Running bin: fastbin_dup
+Trace time for how2heap_fastbin_dup: 3.771116654 seconds
+PoC time for how2heap_fastbin_dup: 0.982412715 seconds
+
+Running test: how2heap_house_of_einherjar
+Running bin: house_of_einherjar
+Trace time for how2heap_house_of_einherjar: 120.984906910 seconds
+PoC time for how2heap_house_of_einherjar: 0.959786114 seconds
+
+Running test: how2heap_house_of_lore
+Running bin: house_of_lore
+Trace time for how2heap_house_of_lore: 38.400950780 seconds
+PoC time for how2heap_house_of_lore: 0.977816675 seconds
+
+Running test: how2heap_house_of_spirit
+Running bin: house_of_spirit
+Trace time for how2heap_house_of_spirit: 7.687043941 seconds
+PoC time for how2heap_house_of_spirit: 0.971573283 seconds
+
+Running test: how2heap_overlapping_chunks
+Running bin: overlapping_chunks
+Trace time for how2heap_overlapping_chunks: 32.160436122 seconds
+PoC time for how2heap_overlapping_chunks: 0.975554368 seconds
+
+Running test: how2heap_poison_null_byte
+Running bin: poison_null_byte
+Trace time for how2heap_poison_null_byte: 57.531851968 seconds
+PoC time for how2heap_poison_null_byte: 0.970140124 seconds
+
+Running test: how2heap_tcache_poisoning
+Running bin: tcache_poisoning
+Trace time for how2heap_tcache_poisoning: 3.382322786 seconds
+PoC time for how2heap_tcache_poisoning: 0.973146097 seconds
+
+Running test: how2heap_unsafe_unlink
+Running bin: unsafe_unlink
+Trace time for how2heap_unsafe_unlink: 211.599522910 seconds
+PoC time for how2heap_unsafe_unlink: 0.964847949 seconds
+
+Running test: how2heap_unsorted_bin_attack
+Running bin: unsorted_bin_attack
+Trace time for how2heap_unsorted_bin_attack: 2.808226343 seconds
+PoC time for how2heap_unsorted_bin_attack: 0.971281399 seconds
+
